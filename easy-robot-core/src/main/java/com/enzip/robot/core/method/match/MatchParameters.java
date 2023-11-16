@@ -14,8 +14,12 @@ public class MatchParameters {
         this.matcher = matcher;
     }
 
+    public boolean matches() {
+        return matcher.matches();
+    }
+
     public String get(String key) {
-        if (matcher.matches()) {
+        if (matches()) {
             return matcher.group(key);
         }
         return null;

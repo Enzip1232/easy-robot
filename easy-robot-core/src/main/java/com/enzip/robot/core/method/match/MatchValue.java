@@ -110,10 +110,10 @@ public class MatchValue {
     }
 
     public boolean matches(String text) {
-        return pattern.matcher(text).matches();
+        return getParameters(text).matches();
     }
 
     public String getParam(String name, String text) {
-        return pattern.matcher(text).group(name);
+        return getParameters(text).get(name);
     }
 }
