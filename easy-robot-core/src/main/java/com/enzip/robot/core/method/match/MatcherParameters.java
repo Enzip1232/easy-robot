@@ -1,4 +1,6 @@
-package com.enzip.robot.core.method.match.parameter;
+package com.enzip.robot.core.method.match;
+
+import java.util.regex.Matcher;
 
 /**
  * @author Enzip
@@ -6,9 +8,9 @@ package com.enzip.robot.core.method.match.parameter;
  */
 public class MatcherParameters implements MatchParameters {
 
-    private final java.util.regex.Matcher matcher;
+    private final Matcher matcher;
 
-    public MatcherParameters(java.util.regex.Matcher matcher) {
+    public MatcherParameters(Matcher matcher) {
         this.matcher = matcher;
     }
 

@@ -1,72 +1,39 @@
-package com.enzip.robot.core.method.match.value;
+package com.enzip.robot.core.method.match;
 
-
-import com.enzip.robot.core.method.match.parameter.EmptyFilterParameters;
-import com.enzip.robot.core.method.match.parameter.MatchParameters;
-import com.enzip.robot.core.method.match.parameter.MatcherParameters;
-import com.enzip.robot.core.method.match.value.MatcherValue;
+import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author Enzip
- * @since 2023/10/14 14:19
+ * @since 2023/11/8 13:54
  */
-public class RegexMatcherValue implements MatcherValue {
-    private final String originalValue;
-    private final boolean isPlainText;
-    private final java.util.regex.Pattern regex;
+@Getter
+public class MatcherValue {
 
-    public RegexMatcherValue(String originalValue, boolean isPlainText) {
-        this.originalValue = originalValue;
-        this.isPlainText = isPlainText;
-        this.regex = createRegex();
+    private final String originalRegex;
+    private final MatchType matchType;
+    private String regex;
+    private Pattern pattern;
+
+    public MatcherValue(MatchType matchType, String originalRegex) {
+        this.matchType = matchType;
+        this.originalRegex = originalRegex;
+        initRegexPattern(originalRegex);
     }
 
-    @Override
-    public java.util.regex.Pattern getRegex() {
-        return regex;
-    }
-
-    @Override
-    public String getOriginal() {
-        return originalValue;
-    }
-
-    @Override
-    public boolean matches(String text) {
-        java.util.regex.Matcher matcher = regex.matcher(text);
-        return matcher.matches();
-    }
-
-    @Override
-    public String getParam(String name, String text) {
-        java.util.regex.Matcher matcher = regex.matcher(text);
-        if (matcher.find()) {
-            return matcher.group(name);
-        }
-        return null;
-    }
-
-    @Override
-    public MatchParameters getParameters(String text) {
-        java.util.regex.Matcher matcher = regex.matcher(text);
-        if (matcher.find()) {
-            return new MatcherParameters(matcher);
+    private void initRegexPattern(String originalRegex) {
+        List<MatchType> matchTypes = Arrays.asList(MatchType.REGEX_MATCHES, MatchType.REGEX_CONTAINS);
+        if (matchTypes.contains(this.matchType)) {
+            this.regex = originalValueToDynamicParametersRegexValue(originalRegex);
         } else {
-            return new EmptyFilterParameters();
+            this.regex = Pattern.quote(originalRegex);
         }
-    }
-
-    private java.util.regex.Pattern createRegex() {
-        if (isPlainText) {
-            return java.util.regex.Pattern.compile(java.util.regex.Pattern.quote(originalValue));
-        } else {
-            String regexValue = originalValueToDynamicParametersRegexValue(originalValue);
-            return java.util.regex.Pattern.compile(regexValue);
-        }
+        this.pattern = Pattern.compile(this.regex);
     }
 
     private String originalValueToDynamicParametersRegexValue(String originalValue) {
@@ -136,5 +103,17 @@ public class RegexMatcherValue implements MatcherValue {
         String name = parts[0];
         String regex = (parts.length > 1) ? parts[1] : ".+";
         return String.format("(?<%s>%s)", name, regex);
+    }
+
+    public MatchParameters getParameters(String text) {
+        return new MatcherParameters(pattern.matcher(text));
+    }
+
+    public boolean matches(String text) {
+        return pattern.matcher(text).matches();
+    }
+
+    public String getParam(String name, String text) {
+        return pattern.matcher(text).group(name);
     }
 }

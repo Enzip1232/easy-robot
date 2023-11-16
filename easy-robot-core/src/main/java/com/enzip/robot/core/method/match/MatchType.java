@@ -1,30 +1,30 @@
 package com.enzip.robot.core.method.match;
 
-import com.enzip.robot.core.method.match.mather.KeywordMatcher;
-import com.enzip.robot.core.method.match.mather.*;
+import java.util.function.BiFunction;
+import java.util.regex.Pattern;
 
 /**
  * @author Enzip
- * @since 2023/10/14 17:09
+ * @since 2023/11/8 11:10
  */
 public enum MatchType {
-    TEXT_EQUALS(StringMatchers.EQUALS, true),
-    TEXT_EQUALS_IGNORE_CASE(StringMatchers.EQUALS_IGNORE_CASE, true),
-    TEXT_STARTS_WITH(StringMatchers.STARTS_WITH, true),
-    TEXT_ENDS_WITH(StringMatchers.ENDS_WITH, true),
-    TEXT_CONTAINS(StringMatchers.CONTAINS, true),
-    REGEX_MATCHES(KeywordRegexMatchers.MATCHES, false),
-    REGEX_CONTAINS(KeywordRegexMatchers.CONTAINS, false);
+    TEXT_EQUALS(String::equals),
+    TEXT_EQUALS_IGNORE_CASE(String::equalsIgnoreCase),
+    TEXT_STARTS_WITH(String::startsWith),
+    TEXT_ENDS_WITH(String::endsWith),
+    TEXT_CONTAINS(String::contains),
+    REGEX_MATCHES((t, r) -> Pattern.matches(r, t)),
+    REGEX_CONTAINS((t, r) -> Pattern.compile(r).matcher(t).find());
 
-    private final Matcher<?,?> matcher;
-    private final boolean isPlainText;
+    private final BiFunction<String, String, Boolean> matcher;
 
-    MatchType(Matcher<?,?> matcher, boolean isPlainText) {
+    // 构造函数
+    MatchType(BiFunction<String, String, Boolean> matcher) {
         this.matcher = matcher;
-        this.isPlainText = isPlainText;
     }
 
-    public boolean isPlainText() {
-        return isPlainText;
+    // 使用枚举实例的方法来执行匹配
+    public boolean match(String text, String regex) {
+        return matcher.apply(text, regex);
     }
 }

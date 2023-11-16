@@ -7,6 +7,7 @@ import com.enzip.robot.component.event.message.PrivateMessageEvent;
 import com.enzip.robot.component.message.MessagesContent;
 import com.enzip.robot.core.bot.BotFactory;
 import com.enzip.robot.core.handler.EventHandler;
+import com.enzip.robot.core.method.MethodEventHandler;
 import com.enzip.robot.core.method.MethodFactory;
 import com.enzip.robot.utils.OMUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -32,6 +33,6 @@ public class PrivateMessageEventHandler implements EventHandler {
         ReflectUtil.setFieldValue(privateMessageEvent, "friend", friend);
         ReflectUtil.setFieldValue(privateMessageEvent, "messagesContent", messagesContent);
 
-        MethodFactory.methodEventHandle(privateMessageEvent);
+        MethodEventHandler.handle(privateMessageEvent);
     }
 }

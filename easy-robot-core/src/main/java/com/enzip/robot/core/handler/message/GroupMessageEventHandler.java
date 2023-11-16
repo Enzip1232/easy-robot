@@ -7,6 +7,7 @@ import com.enzip.robot.component.event.message.GroupMessageEvent;
 import com.enzip.robot.component.message.MessagesContent;
 import com.enzip.robot.core.bot.BotFactory;
 import com.enzip.robot.core.handler.EventHandler;
+import com.enzip.robot.core.method.MethodEventHandler;
 import com.enzip.robot.core.method.MethodFactory;
 import com.enzip.robot.utils.OMUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,6 +35,6 @@ public class GroupMessageEventHandler implements EventHandler {
         ReflectUtil.setFieldValue(groupMessageEvent, "group", group);
         ReflectUtil.setFieldValue(groupMessageEvent, "messagesContent", messagesContent);
 
-        MethodFactory.methodEventHandle(groupMessageEvent);
+        MethodEventHandler.handle(groupMessageEvent);
     }
 }

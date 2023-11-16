@@ -6,6 +6,7 @@ import com.enzip.robot.component.contact.Group;
 import com.enzip.robot.component.event.notice.GroupPokeEvent;
 import com.enzip.robot.core.bot.BotFactory;
 import com.enzip.robot.core.handler.EventHandler;
+import com.enzip.robot.core.method.MethodEventHandler;
 import com.enzip.robot.core.method.MethodFactory;
 import com.enzip.robot.utils.OMUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,6 +32,6 @@ public class GroupPokeEventHandler implements EventHandler {
         ReflectUtil.setFieldValue(groupPokeEvent, "bot", bot);
         ReflectUtil.setFieldValue(groupPokeEvent, "group", group);
 
-        MethodFactory.methodEventHandle(groupPokeEvent);
+        MethodEventHandler.handle(groupPokeEvent);
     }
 }
