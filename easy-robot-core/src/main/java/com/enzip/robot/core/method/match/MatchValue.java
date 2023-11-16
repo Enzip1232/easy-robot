@@ -13,14 +13,14 @@ import java.util.regex.Pattern;
  * @since 2023/11/8 13:54
  */
 @Getter
-public class MatcherValue {
+public class MatchValue {
 
     private final String originalRegex;
     private final MatchType matchType;
     private String regex;
     private Pattern pattern;
 
-    public MatcherValue(MatchType matchType, String originalRegex) {
+    public MatchValue(MatchType matchType, String originalRegex) {
         this.matchType = matchType;
         this.originalRegex = originalRegex;
         initRegexPattern(originalRegex);
@@ -106,7 +106,7 @@ public class MatcherValue {
     }
 
     public MatchParameters getParameters(String text) {
-        return new MatcherParameters(pattern.matcher(text));
+        return new MatchParameters(pattern.matcher(text));
     }
 
     public boolean matches(String text) {

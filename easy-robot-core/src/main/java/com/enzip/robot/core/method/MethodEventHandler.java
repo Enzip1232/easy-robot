@@ -9,7 +9,7 @@ import com.enzip.robot.component.event.BaseEvent;
 import com.enzip.robot.component.message.Message;
 import com.enzip.robot.component.message.MessagesContent;
 import com.enzip.robot.component.message.element.At;
-import com.enzip.robot.core.method.match.MatcherValue;
+import com.enzip.robot.core.method.match.MatchValue;
 import com.enzip.robot.core.method.result.EventResult;
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,7 +53,7 @@ public class MethodEventHandler {
             Filter filter = method.getAnnotation(Filter.class);
             Filter.Targets targets = filter.targets();
             MessagesContent messagesContent = getMessagesContent(baseEvent);
-            MatcherValue matcherValue = new MatcherValue(filter.matchType(), filter.value());
+            MatchValue matchValue = new MatchValue(filter.matchType(), filter.value());
             if (targets != null) {
                 if (ArrayUtil.isNotEmpty(targets.bots())) {
                     return !ArrayUtil.contains(targets.bots(), String.valueOf(baseEvent.getSelfId()));
@@ -86,7 +86,7 @@ public class MethodEventHandler {
             }
             String plainText = messagesContent.getPlainText();
             if (plainText != null && plainText.length() != 0) {
-                return !matcherValue.matches(plainText);
+                return !matchValue.matches(plainText);
             } else {
                 return !filter.ifNullPass();
             }
@@ -97,12 +97,12 @@ public class MethodEventHandler {
     private static Object[] methodParamBind(MethodInfo methodInfo, BaseEvent baseEvent) {
         Parameter[] parameters = methodInfo.getMethod().getParameters();
         boolean hasFilter = methodInfo.getMethod().isAnnotationPresent(Filter.class);
-        MatcherValue matcherValue = null;
+        MatchValue matchValue = null;
         MessagesContent messagesContent = null;
         if (hasFilter) {
             Filter filter = methodInfo.getMethod().getAnnotation(Filter.class);
             messagesContent = getMessagesContent(baseEvent);
-            matcherValue = new MatcherValue(filter.matchType(), filter.value());
+            matchValue = new MatchValue(filter.matchType(), filter.value());
         }
         Object[] objects = new Object[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
@@ -118,7 +118,7 @@ public class MethodEventHandler {
                     if (required && (value == null || value.length() == 0)) {
                         throw new RuntimeException("filterValue bind content is null");
                     }
-                    String param = matcherValue.getParam(parameter.getName(), messagesContent.getPlainText());
+                    String param = matchValue.getParam(parameter.getName(), messagesContent.getPlainText());
                     objects[i] = param;
                 }
             }
