@@ -2,11 +2,9 @@ package com.enzip.robot.core;
 
 import cn.hutool.core.util.StrUtil;
 import com.enzip.robot.component.api.ApiResult;
-import com.enzip.robot.component.event.BaseEvent;
 import com.enzip.robot.core.bot.network.ws.WSBotClient;
 import com.enzip.robot.core.handler.EventFactory;
 import com.enzip.robot.utils.OMUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -24,9 +22,17 @@ public class MessageDispatcher {
     public static void handler(String message) {
         Map<?, ?> map = OMUtil.readValue(message, Map.class);
         if (map.containsKey("echo") && map.containsKey("status") && map.containsKey("retcode") && map.containsKey("data")) {
-            CompletableFuture.runAsync(() -> executeApi(message));
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> executeApi(message));
+            future.exceptionally(throwable -> {
+                log.error("api execute error: {}", throwable.getCause().getMessage());
+                return null;
+            });
         } else if (map.containsKey("time") && map.containsKey("self_id") && map.containsKey("post_type")) {
-            CompletableFuture.runAsync(() -> executeEvent(message));
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> executeEvent(message));
+            future.exceptionally(throwable -> {
+                log.error("event execute error: {}", throwable.getCause().getMessage());
+                return null;
+            });
         }
     }
 
@@ -38,13 +44,13 @@ public class MessageDispatcher {
                 completableFuture.complete(apiResult);
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 
     private static void executeEvent(String message) {
         EventFactory.getInstance().handle(message);
-        if (!StrUtil.contains(message,"meta_event")){
+        if (!StrUtil.contains(message, "meta_event")) {
             System.out.println(message);
         }
     }

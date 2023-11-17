@@ -7,7 +7,6 @@ import com.enzip.robot.component.event.notice.GroupPokeEvent;
 import com.enzip.robot.core.bot.BotFactory;
 import com.enzip.robot.core.handler.EventHandler;
 import com.enzip.robot.core.method.MethodEventHandler;
-import com.enzip.robot.core.method.MethodFactory;
 import com.enzip.robot.utils.OMUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
