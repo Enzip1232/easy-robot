@@ -58,7 +58,6 @@ public abstract class MessageEvent extends BaseEvent {
     private Object sender;
 
     @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     @JsonIgnore
     private MessagesContent messagesContent;
 }

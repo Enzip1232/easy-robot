@@ -70,13 +70,13 @@ public class MessagesBuilder extends ArrayList<Message> {
         return this;
     }
 
-    public MessagesBuilder music(String type, String url, String audio, String title) {
-        this.add(new Music(type, url, audio, title));
+    public MessagesBuilder music(String type, String subtype, String url, String voice, String title) {
+        this.add(new Music(type, subtype, url, voice, title));
         return this;
     }
 
-    public MessagesBuilder music(String type, String url, String audio, String title, String content, String image) {
-        this.add(new Music(type, url, audio, title, content, image));
+    public MessagesBuilder music(String type, String subtype, String url, String voice, String title, String content, String image) {
+        this.add(new Music(type, subtype, url, voice, title, content, image));
         return this;
     }
 

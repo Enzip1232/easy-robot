@@ -18,8 +18,9 @@ public class Music implements Message {
 
     private String id;
     private String type;
+    private String subtype;
     private String url;
-    private String audio;
+    private String voice;
     private String title;
     private String content;
     private String image;
@@ -29,17 +30,19 @@ public class Music implements Message {
         this.id = id;
     }
 
-    public Music(String type, String url, String audio, String title) {
+    public Music(String type, String subtype, String url, String voice, String title) {
         this.type = type;
+        this.subtype = subtype;
         this.url = url;
-        this.audio = audio;
+        this.voice = voice;
         this.title = title;
     }
 
-    public Music(String type, String url, String audio, String title, String content, String image) {
+    public Music(String type,String subtype, String url, String voice, String title, String content, String image) {
         this.type = type;
+        this.subtype = subtype;
         this.url = url;
-        this.audio = audio;
+        this.voice = voice;
         this.title = title;
         this.content = content;
         this.image = image;
