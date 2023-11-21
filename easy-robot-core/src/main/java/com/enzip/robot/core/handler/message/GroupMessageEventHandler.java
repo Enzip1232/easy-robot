@@ -26,14 +26,6 @@ public class GroupMessageEventHandler implements EventHandler {
         }
         GroupMessageEvent groupMessageEvent = OMUtil.convertValue(jsonNode, GroupMessageEvent.class);
 
-        Bot bot = BotFactory.getBots().get(groupMessageEvent.getSelfId());
-        Group group = bot.getGroups().get(groupMessageEvent.getGroupId());
-        MessagesContent messagesContent = new MessagesContent(groupMessageEvent);
-
-        ReflectUtil.setFieldValue(groupMessageEvent, "bot", bot);
-        ReflectUtil.setFieldValue(groupMessageEvent, "group", group);
-        ReflectUtil.setFieldValue(groupMessageEvent, "messagesContent", messagesContent);
-
         MethodEventHandler.handle(groupMessageEvent);
     }
 }

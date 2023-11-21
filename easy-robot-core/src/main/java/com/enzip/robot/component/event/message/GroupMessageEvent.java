@@ -2,6 +2,8 @@ package com.enzip.robot.component.event.message;
 
 import com.enzip.robot.component.contact.Bot;
 import com.enzip.robot.component.contact.Group;
+import com.enzip.robot.component.event.component.support.GroupSupport;
+import com.enzip.robot.core.bot.BotFactory;
 import com.enzip.robot.utils.OMUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,7 +16,7 @@ import lombok.*;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class GroupMessageEvent extends MessageEvent {
+public class GroupMessageEvent extends MessageEvent implements GroupSupport {
 
     /**
      * 群号
@@ -27,14 +29,13 @@ public class GroupMessageEvent extends MessageEvent {
     @JsonProperty("anonymous")
     private Object anonymous;
 
-    @Setter(AccessLevel.PRIVATE)
-    private Bot bot;
-
-    @Setter(AccessLevel.PRIVATE)
-    private Group group;
-
     public static boolean support(JsonNode jsonNode) {
         return ("message".equals(OMUtil.asText(jsonNode, "post_type"))
                 && "group".equals(OMUtil.asText(jsonNode, "message_type")));
+    }
+
+    @Override
+    public Group getGroup() {
+        return BotFactory.getBots().get(getSelfId()).getGroups().get(getGroupId());
     }
 }

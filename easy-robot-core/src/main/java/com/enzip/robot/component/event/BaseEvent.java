@@ -1,5 +1,8 @@
 package com.enzip.robot.component.event;
 
+import com.enzip.robot.component.contact.Bot;
+import com.enzip.robot.component.event.component.support.BotSupport;
+import com.enzip.robot.core.bot.BotFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.ToString;
@@ -10,7 +13,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public abstract class BaseEvent {
+public abstract class BaseEvent implements BotSupport {
 
     /**
      * 事件发生的unix时间戳
@@ -27,4 +30,9 @@ public abstract class BaseEvent {
      */
     @JsonProperty("post_type")
     private String postType;
+
+    @Override
+    public Bot getBot() {
+        return BotFactory.getBots().get(getSelfId());
+    }
 }

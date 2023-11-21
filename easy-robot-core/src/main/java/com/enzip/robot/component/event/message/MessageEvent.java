@@ -1,9 +1,10 @@
 package com.enzip.robot.component.event.message;
 
 import com.enzip.robot.component.event.BaseEvent;
-import com.enzip.robot.component.message.Messages;
+import com.enzip.robot.component.event.component.Sender;
+import com.enzip.robot.component.event.component.support.MessagesContentSupport;
+import com.enzip.robot.component.event.component.support.SenderSupport;
 import com.enzip.robot.component.message.MessagesContent;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -14,7 +15,7 @@ import lombok.*;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public abstract class MessageEvent extends BaseEvent {
+public abstract class MessageEvent extends BaseEvent implements MessagesContentSupport,SenderSupport {
 
     /**
      * 消息类型
@@ -55,9 +56,10 @@ public abstract class MessageEvent extends BaseEvent {
      * 发送者信息
      */
     @JsonProperty("sender")
-    private Object sender;
+    private Sender sender;
 
-    @Setter(AccessLevel.PRIVATE)
-    @JsonIgnore
-    private MessagesContent messagesContent;
+    @Override
+    public MessagesContent getMessagesContent() {
+        return new MessagesContent(this);
+    }
 }

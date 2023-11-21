@@ -28,12 +28,6 @@ public class PrivateMessageEvent extends MessageEvent {
     @JsonProperty("temp_source")
     private Integer tempSource;
 
-    @Setter(AccessLevel.PRIVATE)
-    private Bot bot;
-
-    @Setter(AccessLevel.PRIVATE)
-    private Friend friend;
-
     public static boolean support(JsonNode jsonNode) {
         return ("message".equals(OMUtil.asText(jsonNode, "post_type"))
                 && "private".equals(OMUtil.asText(jsonNode, "message_type")));

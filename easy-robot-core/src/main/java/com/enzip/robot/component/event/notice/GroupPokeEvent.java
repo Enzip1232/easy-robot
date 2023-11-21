@@ -2,7 +2,12 @@ package com.enzip.robot.component.event.notice;
 
 import com.enzip.robot.component.contact.Bot;
 import com.enzip.robot.component.contact.Group;
+import com.enzip.robot.component.contact.GroupMember;
 import com.enzip.robot.component.event.BaseEvent;
+import com.enzip.robot.component.event.component.Sender;
+import com.enzip.robot.component.event.component.support.GroupSupport;
+import com.enzip.robot.component.event.component.support.SenderSupport;
+import com.enzip.robot.core.bot.BotFactory;
 import com.enzip.robot.utils.OMUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,7 +20,7 @@ import lombok.*;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class GroupPokeEvent extends BaseEvent {
+public class GroupPokeEvent extends BaseEvent implements GroupSupport , SenderSupport {
 
     /**
      * 提示类型
@@ -47,15 +52,20 @@ public class GroupPokeEvent extends BaseEvent {
     @JsonProperty("target_id")
     private Long targetId;
 
-    @Setter(AccessLevel.PRIVATE)
-    private Bot bot;
-
-    @Setter(AccessLevel.PRIVATE)
-    private Group group;
-
     public static boolean support(JsonNode jsonNode) {
         return ("notice".equals(OMUtil.asText(jsonNode, "post_type"))
                 && "poke".equals(OMUtil.asText(jsonNode, "sub_type"))
                 && OMUtil.asText(jsonNode, "group_id") != null);
+    }
+
+    @Override
+    public Group getGroup() {
+        return BotFactory.getBots().get(getSelfId()).getGroups().get(getGroupId());
+    }
+
+    @Override
+    public Sender getSender() {
+        GroupMember groupMember = BotFactory.getBots().get(getSelfId()).getGroups().get(getGroupId()).getGroupMembers().get(getSenderId());
+        return new Sender(groupMember);
     }
 }

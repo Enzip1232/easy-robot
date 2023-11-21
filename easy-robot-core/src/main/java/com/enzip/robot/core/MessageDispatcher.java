@@ -24,13 +24,15 @@ public class MessageDispatcher {
         if (map.containsKey("echo") && map.containsKey("status") && map.containsKey("retcode") && map.containsKey("data")) {
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> executeApi(message));
             future.exceptionally(throwable -> {
-                log.error("api execute error: {}", throwable.getCause().getMessage());
+                throwable.printStackTrace();
+                log.error("event execute error: {}", throwable.getMessage());
                 return null;
             });
         } else if (map.containsKey("time") && map.containsKey("self_id") && map.containsKey("post_type")) {
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> executeEvent(message));
             future.exceptionally(throwable -> {
-                log.error("event execute error: {}", throwable.getCause().getMessage());
+                throwable.printStackTrace();
+                log.error("event execute error: {}", throwable.getMessage());
                 return null;
             });
         }

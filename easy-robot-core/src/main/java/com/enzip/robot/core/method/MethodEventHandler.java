@@ -6,6 +6,7 @@ import cn.hutool.core.util.ReflectUtil;
 import com.enzip.robot.component.annotation.Filter;
 import com.enzip.robot.component.annotation.FilterValue;
 import com.enzip.robot.component.event.BaseEvent;
+import com.enzip.robot.component.event.message.MessageEvent;
 import com.enzip.robot.component.message.Message;
 import com.enzip.robot.component.message.MessagesContent;
 import com.enzip.robot.component.message.element.At;
@@ -60,7 +61,7 @@ public class MethodEventHandler {
                 }
                 if (ArrayUtil.isNotEmpty(targets.authors())) {
                     try {
-                        Long userId = (Long) ReflectUtil.getFieldValue(baseEvent, "user_id");
+                        Long userId = (Long) ReflectUtil.getFieldValue(baseEvent, "userId");
                         return !ArrayUtil.contains(targets.authors(), String.valueOf(userId));
                     } catch (UtilException e) {
                         log.error("filter error by userId : {}", e.getMessage());
@@ -68,7 +69,7 @@ public class MethodEventHandler {
                 }
                 if (ArrayUtil.isNotEmpty(targets.groups())) {
                     try {
-                        Long groupId = (Long) ReflectUtil.getFieldValue(baseEvent, "group_id");
+                        Long groupId = (Long) ReflectUtil.getFieldValue(baseEvent, "groupId");
                         return !ArrayUtil.contains(targets.groups(), String.valueOf(groupId));
                     } catch (UtilException e) {
                         log.error("filter error by groupId : {}", e.getMessage());
@@ -137,11 +138,9 @@ public class MethodEventHandler {
     }
 
     private static MessagesContent getMessagesContent(BaseEvent baseEvent) {
-        MessagesContent messagesContent;
-        try {
-            messagesContent = (MessagesContent) ReflectUtil.getFieldValue(baseEvent, "messagesContent");
-        } catch (UtilException ignored) {
-            messagesContent = new MessagesContent();
+        MessagesContent messagesContent = new MessagesContent();
+        if (baseEvent instanceof MessageEvent) {
+            messagesContent = ((MessageEvent) baseEvent).getMessagesContent();
         }
         return messagesContent;
     }

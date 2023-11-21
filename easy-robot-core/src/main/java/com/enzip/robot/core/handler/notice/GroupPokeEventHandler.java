@@ -25,12 +25,6 @@ public class GroupPokeEventHandler implements EventHandler {
         }
         GroupPokeEvent groupPokeEvent = OMUtil.convertValue(jsonNode, GroupPokeEvent.class);
 
-        Bot bot = BotFactory.getBots().get(groupPokeEvent.getSelfId());
-        Group group = bot.getGroups().get(groupPokeEvent.getGroupId());
-
-        ReflectUtil.setFieldValue(groupPokeEvent, "bot", bot);
-        ReflectUtil.setFieldValue(groupPokeEvent, "group", group);
-
         MethodEventHandler.handle(groupPokeEvent);
     }
 }

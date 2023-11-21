@@ -24,14 +24,6 @@ public class PrivateMessageEventHandler implements EventHandler {
         }
         PrivateMessageEvent privateMessageEvent = OMUtil.convertValue(jsonNode, PrivateMessageEvent.class);
 
-        Bot bot = BotFactory.getBots().get(privateMessageEvent.getSelfId());
-        Friend friend = bot.getFriends().get(privateMessageEvent.getUserId());
-        MessagesContent messagesContent = new MessagesContent(privateMessageEvent);
-
-        ReflectUtil.setFieldValue(privateMessageEvent, "bot", bot);
-        ReflectUtil.setFieldValue(privateMessageEvent, "friend", friend);
-        ReflectUtil.setFieldValue(privateMessageEvent, "messagesContent", messagesContent);
-
         MethodEventHandler.handle(privateMessageEvent);
     }
 }
