@@ -40,13 +40,18 @@ public class MessagesBuilder extends ArrayList<Message> {
         return this;
     }
 
-    public MessagesBuilder image(String file, String type) {
-        this.add(new Image(file, type));
+    public MessagesBuilder image(String file, Integer cache) {
+        this.add(new Image(file, cache));
         return this;
     }
 
-    public MessagesBuilder image(String file, String type, Integer id) {
-        this.add(new Image(file, type, id));
+    public MessagesBuilder image(String file, String type, Integer cache) {
+        this.add(new Image(file, type, cache));
+        return this;
+    }
+
+    public MessagesBuilder image(String file, String type, Integer id, Integer cache) {
+        this.add(new Image(file, type, id, cache));
         return this;
     }
 

@@ -28,15 +28,27 @@ public class Image implements Message {
         this.file = file;
     }
 
+    public Image(String file, Integer cache) {
+        this.file = file;
+        this.cache = cache;
+    }
+
     public Image(String file, String type) {
         this.file = file;
         this.type = type;
     }
 
-    public Image(String file, String type, Integer id) {
+    public Image(String file, String type, Integer cache) {
+        this.file = file;
+        this.type = type;
+        this.cache = cache;
+    }
+
+    public Image(String file, String type, Integer id, Integer cache) {
         this.file = file;
         this.type = type;
         this.id = id;
+        this.cache = cache;
     }
 
 
