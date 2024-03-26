@@ -65,8 +65,18 @@ public class MessagesBuilder extends ArrayList<Message> {
         return this;
     }
 
+    public MessagesBuilder video(String file, Integer cache) {
+        this.add(new Video(file, cache));
+        return this;
+    }
+
     public MessagesBuilder video(String file, String cover) {
         this.add(new Video(file, cover));
+        return this;
+    }
+
+    public MessagesBuilder video(String file, String cover, Integer cache) {
+        this.add(new Video(file, cover, cache));
         return this;
     }
 

@@ -22,13 +22,26 @@ public class Video implements Message {
 
     private Integer c;
 
+    private Integer cache;
+
     public Video(String file) {
         this.file = file;
+    }
+
+    public Video(String file, Integer cache) {
+        this.file = file;
+        this.cache = cache;
     }
 
     public Video(String file, String cover) {
         this.file = file;
         this.cover = cover;
+    }
+
+    public Video(String file, String cover, Integer cache) {
+        this.file = file;
+        this.cover = cover;
+        this.cache = cache;
     }
 
     @Override
